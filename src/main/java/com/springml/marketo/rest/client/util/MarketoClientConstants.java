@@ -19,9 +19,11 @@ public class MarketoClientConstants {
     public static final String STR_FILTER_TYPE = "filterType";
     public static final String STR_FILTER_VALUES = "filterValues";
     public static final String STR_FIELDS = "fields";
+    public static final String STR_NEXT_PAGE_TOKEN = "nextPageToken";
 
     public static final String STR_OAUTH_PATH = "/identity/oauth/token";
 
     public static final String STR_DEFAULT_VERSION = "v1";
-    public static final String ERROR_CODE_INVALID_AUTH_TOKEN = "601";
+    public static final String ERROR_CODE_INVALID_ACCESS_TOKEN = "601";
+    public static final String ERROR_CODE_EXPIRED_ACCESS_TOKEN = "602";
 }

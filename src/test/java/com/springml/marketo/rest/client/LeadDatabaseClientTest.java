@@ -9,7 +9,7 @@ import org.junit.Test;
 public class LeadDatabaseClientTest {
     private static String CLIENT_ID = "55cb177c-3375-4ceb-b777-94418551b261";
     private static String CLIENT_SECRET = "UuPN6uHagXwDTOQqDtYQmjnRy6JZo4Yr";
-    private static String MARKETO_BASEURI = "https://559-AGH-810.mktorest.com";
+    private static String MARKETO_BASEURI = "https://523-AGH-210.mktorest.com";
 
     @Test
     public void testQueryLeads() throws Exception {

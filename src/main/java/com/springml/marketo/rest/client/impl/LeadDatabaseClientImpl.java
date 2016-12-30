@@ -53,11 +53,11 @@ public class LeadDatabaseClientImpl implements LeadDatabaseClient {
         sessionId = login();
     }
 
-    public QueryResult queryObjects(String object) {
+    public QueryResult getObjects(String object) {
         return null;
     }
 
-    public QueryResult queryObjects(String object, List<String> fields) {
+    public QueryResult getObjects(String object, List<String> fields) {
         return null;
     }
 
@@ -67,12 +67,18 @@ public class LeadDatabaseClientImpl implements LeadDatabaseClient {
 
     public QueryResult queryObjects(String object, String filterType,
                                     String filterValues, List<String> fields) throws Exception {
-        return queryObjects(object, filterType, filterValues, fields, 0);
+        return queryObjects(object, filterType, filterValues, fields, null, 0);
+    }
+
+    public QueryResult fetchNextPage(QueryResult queryResult) throws Exception {
+        return queryObjects(queryResult.getObject(), queryResult.getFilterType(),
+                queryResult.getFilterValues(), queryResult.getFields(),
+                queryResult.getNextPageToken(), 0);
     }
 
     private QueryResult queryObjects(String object, String filterType,
                                      String filterValues, List<String> fields,
-                                     int retryCount) throws Exception {
+                                     String nextPageToken, int retryCount) throws Exception {
         String path = getRestPath(object);
 
         Map<String, String> params = new HashMap<>();
@@ -85,6 +91,10 @@ public class LeadDatabaseClientImpl implements LeadDatabaseClient {
             params.put(STR_FIELDS, String.join(STR_COMMA, fields));
         }
 
+        if (StringUtils.isNotBlank(nextPageToken)) {
+            params.put(STR_NEXT_PAGE_TOKEN, nextPageToken);
+        }
+
         LOG.info("Session Id : " + sessionId);
         String response = httpHelper.get(baseUri, path, sessionId, params);
         LOG.info("Response from Marketo REST Api " + response);
@@ -92,14 +102,21 @@ public class LeadDatabaseClientImpl implements LeadDatabaseClient {
         if (!queryResult.isSuccess()) {
             List<Error> errors = queryResult.getErrors();
             for (Error error : errors) {
-                if (retryCount < 1 && ERROR_CODE_INVALID_AUTH_TOKEN.equals(error.getCode())) {
+                if (retryCount < 1 &&
+                        (ERROR_CODE_INVALID_ACCESS_TOKEN.equals(error.getCode()) ||
+                                ERROR_CODE_EXPIRED_ACCESS_TOKEN.equals(error.getCode()))) {
                     // re-login to get new sessionId
                     login();
-                    return queryObjects(object, filterType, filterValues, fields, 1);
+                    queryResult = queryObjects(object, filterType, filterValues, fields, nextPageToken, 1);
+                    break;
                 }
             }
         }
 
+        queryResult.setObject(object);
+        queryResult.setFields(fields);
+        queryResult.setFilterType(filterType);
+        queryResult.setFilterValues(filterValues);
         return queryResult;
     }
 

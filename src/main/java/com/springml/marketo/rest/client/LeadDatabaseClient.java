@@ -14,7 +14,7 @@ public interface LeadDatabaseClient {
      * @param object Object for which all records to be fetched (Like leads)
      * @return
      */
-    QueryResult queryObjects(String object);
+    QueryResult getObjects(String object);
 
     /**
      * Returns all records of the specified object
@@ -22,7 +22,7 @@ public interface LeadDatabaseClient {
      * @param fields Fields to be queried from the object
      * @return
      */
-    QueryResult queryObjects(String object, List<String> fields);
+    QueryResult getObjects(String object, List<String> fields);
 
     /**
      * Query Lead database objects
@@ -42,4 +42,13 @@ public interface LeadDatabaseClient {
      * @return
      */
     QueryResult queryObjects(String object, String filterType, String filterValues, List<String> fields) throws Exception;
+
+    /**
+     * Fetches Next Page if exists
+     * @param queryResult
+     * @return
+     * @throws Exception
+     */
+    QueryResult fetchNextPage(QueryResult queryResult) throws Exception;
+
 }
