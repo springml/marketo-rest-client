@@ -3,6 +3,7 @@ package com.springml.marketo.rest.client;
 import com.springml.marketo.rest.client.model.QueryResult;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Java API to execute the Marketo Lead Database REST API
@@ -14,7 +15,7 @@ public interface LeadDatabaseClient {
      * @param object Object for which all records to be fetched (Like leads)
      * @return
      */
-    QueryResult getObjects(String object);
+    List<Map<String, String>> getAllRecords(String object) throws Exception;
 
     /**
      * Returns all records of the specified object
@@ -22,7 +23,7 @@ public interface LeadDatabaseClient {
      * @param fields Fields to be queried from the object
      * @return
      */
-    QueryResult getObjects(String object, List<String> fields);
+    List<Map<String, String>> getAllRecords(String object, List<String> fields) throws Exception;
 
     /**
      * Query Lead database objects
@@ -31,7 +32,7 @@ public interface LeadDatabaseClient {
      * @param filterValues Values to be used in filter
      * @return
      */
-    QueryResult queryObjects(String object, String filterType, String filterValues) throws Exception;
+    QueryResult query(String object, String filterType, String filterValues) throws Exception;
 
     /**
      * Query Lead database objects
@@ -41,7 +42,7 @@ public interface LeadDatabaseClient {
      * @param fields Fields to be queried from the object
      * @return
      */
-    QueryResult queryObjects(String object, String filterType, String filterValues, List<String> fields) throws Exception;
+    QueryResult query(String object, String filterType, String filterValues, List<String> fields) throws Exception;
 
     /**
      * Fetches Next Page if exists

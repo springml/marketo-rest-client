@@ -11,6 +11,7 @@ import com.springml.marketo.rest.client.util.MarketoClientException;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,32 +54,61 @@ public class LeadDatabaseClientImpl implements LeadDatabaseClient {
         sessionId = login();
     }
 
-    public QueryResult getObjects(String object) {
-        return null;
+    public List<Map<String, String>> getAllRecords(String object) throws Exception {
+        return getAllRecords(object, null);
     }
 
-    public QueryResult getObjects(String object, List<String> fields) {
-        return null;
+    public List<Map<String, String>> getAllRecords(String object, List<String> fields) throws Exception {
+        List<Map<String, String>> totalRecords = new ArrayList<>();
+
+        int cursor = 1;
+
+        boolean containsMoreRecords = true;
+        while (containsMoreRecords) {
+            // Fetch 300 records for every iteration
+            StringBuilder filterValues = new StringBuilder();
+            for (int i = 0; i < 300; i++) {
+                filterValues.append(cursor);
+                if (i != 300) {
+                    filterValues.append(",");
+                }
+
+                cursor++;
+            }
+
+            QueryResult queryResult = query(object, STR_ID, filterValues.toString(), fields);
+            if (!queryResult.isSuccess()) {
+                throw new Exception ("Error while fetching records from Marketo. Error : " + queryResult.getErrors());
+            }
+
+            if (CollectionUtils.isNotEmpty(queryResult.getResult())) {
+                totalRecords.addAll(queryResult.getResult());
+            } else {
+                containsMoreRecords = false;
+            }
+        }
+
+        return totalRecords;
     }
 
-    public QueryResult queryObjects(String object, String filterType, String filterValues) throws Exception {
-        return queryObjects(object, filterType, filterValues, null);
+    public QueryResult query(String object, String filterType, String filterValues) throws Exception {
+        return query(object, filterType, filterValues, null);
     }
 
-    public QueryResult queryObjects(String object, String filterType,
-                                    String filterValues, List<String> fields) throws Exception {
-        return queryObjects(object, filterType, filterValues, fields, null, 0);
+    public QueryResult query(String object, String filterType,
+                             String filterValues, List<String> fields) throws Exception {
+        return query(object, filterType, filterValues, fields, null, 0);
     }
 
     public QueryResult fetchNextPage(QueryResult queryResult) throws Exception {
-        return queryObjects(queryResult.getObject(), queryResult.getFilterType(),
+        return query(queryResult.getObject(), queryResult.getFilterType(),
                 queryResult.getFilterValues(), queryResult.getFields(),
                 queryResult.getNextPageToken(), 0);
     }
 
-    private QueryResult queryObjects(String object, String filterType,
-                                     String filterValues, List<String> fields,
-                                     String nextPageToken, int retryCount) throws Exception {
+    private QueryResult query(String object, String filterType,
+                              String filterValues, List<String> fields,
+                              String nextPageToken, int retryCount) throws Exception {
         String path = getRestPath(object);
 
         Map<String, String> params = new HashMap<>();
@@ -107,7 +137,7 @@ public class LeadDatabaseClientImpl implements LeadDatabaseClient {
                                 ERROR_CODE_EXPIRED_ACCESS_TOKEN.equals(error.getCode()))) {
                     // re-login to get new sessionId
                     login();
-                    queryResult = queryObjects(object, filterType, filterValues, fields, nextPageToken, 1);
+                    queryResult = query(object, filterType, filterValues, fields, nextPageToken, 1);
                     break;
                 }
             }
