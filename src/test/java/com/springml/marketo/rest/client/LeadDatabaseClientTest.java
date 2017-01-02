@@ -1,6 +1,7 @@
 package com.springml.marketo.rest.client;
 
 import com.springml.marketo.rest.client.model.QueryResult;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -12,6 +13,7 @@ public class LeadDatabaseClientTest {
     private static String MARKETO_BASEURI = "https://523-AGH-210.mktorest.com";
 
     @Test
+    @Ignore
     public void testQueryLeads() throws Exception {
         LeadDatabaseClient leadDatabaseClient = MarketoClientFactory.
                 getLeadDatabaseClient(CLIENT_ID, CLIENT_SECRET, MARKETO_BASEURI);
