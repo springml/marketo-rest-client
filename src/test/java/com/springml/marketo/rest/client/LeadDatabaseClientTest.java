@@ -18,7 +18,7 @@ public class LeadDatabaseClientTest {
         LeadDatabaseClient leadDatabaseClient = MarketoClientFactory.
                 getLeadDatabaseClient(CLIENT_ID, CLIENT_SECRET, MARKETO_BASEURI);
 
-        QueryResult queryResult = leadDatabaseClient.queryObjects("leads", "Id", "1");
+        QueryResult queryResult = leadDatabaseClient.query("leads", "Id", "1");
         System.out.println("queryResult : " + queryResult);
     }
 }
