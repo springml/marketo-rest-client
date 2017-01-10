@@ -67,7 +67,7 @@ public interface LeadDatabaseClient {
      * @return
      * @throws Exception
      */
-    QueryResult getActivites(Date sinceDate) throws Exception;
+    QueryResult getActivites(String sinceDate) throws Exception;
 
     /**
      * List all the activities of the specified types
@@ -76,7 +76,7 @@ public interface LeadDatabaseClient {
      * @return
      * @throws Exception
      */
-    QueryResult getActivities(Date sinceDate, List<String> activityTypeIds) throws Exception;
+    QueryResult getActivities(String sinceDate, List<String> activityTypeIds) throws Exception;
 
     /**
      * List Lead changes
@@ -85,7 +85,7 @@ public interface LeadDatabaseClient {
      * @return
      * @throws Exception
      */
-    QueryResult getLeadChangesActivites(Date sinceDate, List<String> affectedFields) throws Exception;
+    QueryResult getLeadChangesActivites(String sinceDate, List<String> affectedFields) throws Exception;
 
     /**
      * Get the activities for Deleted Leads
@@ -93,5 +93,13 @@ public interface LeadDatabaseClient {
      * @return
      * @throws Exception
      */
-    QueryResult getDeletedLeadsActivites(Date sinceDate) throws Exception;
+    QueryResult getDeletedLeadsActivites(String sinceDate) throws Exception;
+
+    /**
+     * Get the paging token to be used on other calls
+     * @param sinceDateTime
+     * @return
+     * @throws Exception
+     */
+    String getPagingToken(String sinceDateTime) throws Exception;
 }

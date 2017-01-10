@@ -7,12 +7,20 @@ import com.springml.marketo.rest.client.model.Error;
 import com.springml.marketo.rest.client.model.OAuthResponse;
 import com.springml.marketo.rest.client.model.QueryResult;
 import com.springml.marketo.rest.client.model.activities.ActivityTypes;
+import com.springml.marketo.rest.client.model.activities.PagingToken;
+import com.springml.marketo.rest.client.model.activities.Result;
 import com.springml.marketo.rest.client.util.HttpHelper;
 import com.springml.marketo.rest.client.util.MarketoClientException;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
+import org.apache.commons.lang3.time.DateUtils;
 
-import java.util.*;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -107,29 +115,50 @@ public class LeadDatabaseClientImpl implements LeadDatabaseClient {
 
     @Override
     public ActivityTypes getActivityTypes() throws Exception {
-        String path = getRestPath("activities/types");
+        String path = getRestPath(STR_ACTIVITIES_TYPES_PATH);
         String response = httpHelper.get(baseUri, path, sessionId);
         return objectMapper.readValue(response, ActivityTypes.class);
     }
 
     @Override
-    public QueryResult getActivites(Date sinceDate) throws Exception {
+    public QueryResult getActivites(String sinceDate) throws Exception {
+        ActivityTypes activityTypes = getActivityTypes();
+        validate(activityTypes);
+        List<Result> results = activityTypes.getResult();
+        List<String> activityIdList = new ArrayList<>();
+        for (Result result : results) {
+            activityIdList.add(String.valueOf(result.getId()));
+        }
+
+        return getActivities(sinceDate, activityIdList);
+    }
+
+    @Override
+    public QueryResult getActivities(String sinceDate, List<String> activityTypeIds) throws Exception {
+        String pagingToken = getPagingToken(sinceDate);
         return null;
     }
 
     @Override
-    public QueryResult getActivities(Date sinceDate, List<String> activityTypeIds) throws Exception {
+    public QueryResult getLeadChangesActivites(String sinceDate, List<String> affectedFields) throws Exception {
         return null;
     }
 
     @Override
-    public QueryResult getLeadChangesActivites(Date sinceDate, List<String> affectedFields) throws Exception {
+    public QueryResult getDeletedLeadsActivites(String sinceDate) throws Exception {
         return null;
     }
 
     @Override
-    public QueryResult getDeletedLeadsActivites(Date sinceDate) throws Exception {
-        return null;
+    public String getPagingToken(String sinceDate) throws Exception {
+        String restPath = getRestPath(STR_ACTIVITIES_PAGING_TOKEN_PATH);
+        Map<String, String> params = new HashMap<>();
+        params.put(STR_SINCE_DATE_TIME, sinceDate);
+
+        String response = httpHelper.get(baseUri, restPath, sessionId, params);
+        PagingToken pagingToken = objectMapper.readValue(response, PagingToken.class);
+
+        return pagingToken.getNextPageToken();
     }
 
     private QueryResult query(String object, String filterType,
@@ -206,19 +235,47 @@ public class LeadDatabaseClientImpl implements LeadDatabaseClient {
         return baseUri;
     }
 
+    private void validate(String dateTime) throws Exception {
+        String[] validFormat = new String[] {
+                DateFormatUtils.ISO_8601_EXTENDED_DATE_FORMAT.toString(),
+                DateFormatUtils.ISO_8601_EXTENDED_DATETIME_FORMAT.toString(),
+                DateFormatUtils.ISO_8601_EXTENDED_DATETIME_TIME_ZONE_FORMAT.toString()
+        };
+
+        try {
+            DateUtils.parseDate(dateTime, validFormat);
+        } catch (ParseException e) {
+            LOG.log(Level.FINE, "Error while parsing date " + dateTime, e);
+            throw new Exception("Error while parsing date " + dateTime, e);
+        }
+    }
+
+    private void validate(ActivityTypes activityTypes) throws Exception {
+        if (!activityTypes.getSuccess()) {
+            String error = getErrorAsString(activityTypes.getErrors());
+            LOG.log(Level.SEVERE, error);
+            throw new Exception(error);
+
+        }
+    }
+
+    private String getErrorAsString(List<Error> errors) {
+        StringBuilder errorStmts = new StringBuilder();
+        errorStmts.append("Error returned from Marketo API \n");
+        for (Error error : errors) {
+            errorStmts.append("Error Code : " + error.getCode() + "\n");
+            errorStmts.append("Error Message : " + error.getMessage() + "\n");
+            errorStmts.append("\n");
+        }
+
+        return errorStmts.toString();
+    }
+
     private void validate(QueryResult queryResult) throws Exception {
         if (!queryResult.isSuccess()) {
-            StringBuilder errorStmts = new StringBuilder();
-            List<Error> errors = queryResult.getErrors();
-            errorStmts.append("Error returned from Marketo API \n");
-            for (Error error : errors) {
-                errorStmts.append("Error Code : " + error.getCode() + "\n");
-                errorStmts.append("Error Message : " + error.getMessage() + "\n");
-                errorStmts.append("\n");
-            }
-
-            LOG.log(Level.SEVERE, errorStmts.toString());
-            throw new Exception(errorStmts.toString());
+            String error = getErrorAsString(queryResult.getErrors());
+            LOG.log(Level.SEVERE, error);
+            throw new Exception(error);
         }
     }
 
