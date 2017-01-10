@@ -6,15 +6,14 @@ import com.springml.marketo.rest.client.LeadDatabaseClient;
 import com.springml.marketo.rest.client.model.Error;
 import com.springml.marketo.rest.client.model.OAuthResponse;
 import com.springml.marketo.rest.client.model.QueryResult;
+import com.springml.marketo.rest.client.model.activities.ActivityTypes;
 import com.springml.marketo.rest.client.util.HttpHelper;
 import com.springml.marketo.rest.client.util.MarketoClientException;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static com.springml.marketo.rest.client.util.MarketoClientConstants.*;
@@ -106,6 +105,33 @@ public class LeadDatabaseClientImpl implements LeadDatabaseClient {
                 queryResult.getNextPageToken(), 0);
     }
 
+    @Override
+    public ActivityTypes getActivityTypes() throws Exception {
+        String path = getRestPath("activities/types");
+        String response = httpHelper.get(baseUri, path, sessionId);
+        return objectMapper.readValue(response, ActivityTypes.class);
+    }
+
+    @Override
+    public QueryResult getActivites(Date sinceDate) throws Exception {
+        return null;
+    }
+
+    @Override
+    public QueryResult getActivities(Date sinceDate, List<String> activityTypeIds) throws Exception {
+        return null;
+    }
+
+    @Override
+    public QueryResult getLeadChangesActivites(Date sinceDate, List<String> affectedFields) throws Exception {
+        return null;
+    }
+
+    @Override
+    public QueryResult getDeletedLeadsActivites(Date sinceDate) throws Exception {
+        return null;
+    }
+
     private QueryResult query(String object, String filterType,
                               String filterValues, List<String> fields,
                               String nextPageToken, int retryCount) throws Exception {
@@ -178,6 +204,22 @@ public class LeadDatabaseClientImpl implements LeadDatabaseClient {
         }
 
         return baseUri;
+    }
+
+    private void validate(QueryResult queryResult) throws Exception {
+        if (!queryResult.isSuccess()) {
+            StringBuilder errorStmts = new StringBuilder();
+            List<Error> errors = queryResult.getErrors();
+            errorStmts.append("Error returned from Marketo API \n");
+            for (Error error : errors) {
+                errorStmts.append("Error Code : " + error.getCode() + "\n");
+                errorStmts.append("Error Message : " + error.getMessage() + "\n");
+                errorStmts.append("\n");
+            }
+
+            LOG.log(Level.SEVERE, errorStmts.toString());
+            throw new Exception(errorStmts.toString());
+        }
     }
 
     private void validate(String clientId, String clientSecret, String baseUri) throws MarketoClientException {

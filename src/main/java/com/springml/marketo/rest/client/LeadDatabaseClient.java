@@ -1,7 +1,9 @@
 package com.springml.marketo.rest.client;
 
 import com.springml.marketo.rest.client.model.QueryResult;
+import com.springml.marketo.rest.client.model.activities.ActivityTypes;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -52,4 +54,44 @@ public interface LeadDatabaseClient {
      */
     QueryResult fetchNextPage(QueryResult queryResult) throws Exception;
 
+    /**
+     * List all the activity types using /rest/v1/activities/types.json
+     * @return
+     * @throws Exception
+     */
+    ActivityTypes getActivityTypes() throws Exception;
+
+    /**
+     * List All Activities of all activity types
+     * @param sinceDate
+     * @return
+     * @throws Exception
+     */
+    QueryResult getActivites(Date sinceDate) throws Exception;
+
+    /**
+     * List all the activities of the specified types
+     * @param sinceDate
+     * @param activityTypeIds
+     * @return
+     * @throws Exception
+     */
+    QueryResult getActivities(Date sinceDate, List<String> activityTypeIds) throws Exception;
+
+    /**
+     * List Lead changes
+     * @param sinceDate
+     * @param affectedFields List of fields you want to retrieve changes for
+     * @return
+     * @throws Exception
+     */
+    QueryResult getLeadChangesActivites(Date sinceDate, List<String> affectedFields) throws Exception;
+
+    /**
+     * Get the activities for Deleted Leads
+     * @param sinceDate
+     * @return
+     * @throws Exception
+     */
+    QueryResult getDeletedLeadsActivites(Date sinceDate) throws Exception;
 }

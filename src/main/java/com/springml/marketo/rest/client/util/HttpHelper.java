@@ -6,7 +6,6 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -31,6 +30,10 @@ public class HttpHelper {
 
     public String get(String baseUri, String path, Map<String, String> params) throws Exception {
         return get(baseUri, path, params, null);
+    }
+
+    public String get(String baseUri, String path, String sessionId) throws Exception {
+        return get(baseUri, path, sessionId, null);
     }
 
     public String get(String baseUri, String path, String sessionId,
