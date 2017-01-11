@@ -22,10 +22,14 @@ public class MarketoClientConstants {
     public static final String STR_FIELDS = "fields";
     public static final String STR_NEXT_PAGE_TOKEN = "nextPageToken";
     public static final String STR_SINCE_DATE_TIME = "sinceDatetime";
+    public static final String STR_ACTIVITY_TYPE_IDS = "activityTypeIds";
+    public static final String STR_ATTRIBUTES = "attributes";
 
     public static final String STR_OAUTH_PATH = "/identity/oauth/token";
     public static final String STR_ACTIVITIES_TYPES_PATH = "activities/types";
     public static final String STR_ACTIVITIES_PAGING_TOKEN_PATH = "activities/pagingtoken";
+
+    public static final String OBJ_ACTIVITIES = "activities";
 
     public static final String STR_DEFAULT_VERSION = "v1";
     public static final String ERROR_CODE_INVALID_ACCESS_TOKEN = "601";

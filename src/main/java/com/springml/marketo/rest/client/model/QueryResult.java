@@ -1,5 +1,8 @@
 package com.springml.marketo.rest.client.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.springml.marketo.rest.client.util.QueryResultDeserializer;
+
 import java.util.List;
 import java.util.Map;
 
@@ -8,6 +11,7 @@ import java.util.Map;
  */
 public class QueryResult {
     private String requestId;
+    @JsonDeserialize(using = QueryResultDeserializer.class)
     private List<Map<String, String>> result;
     private List<Error> errors;
     private boolean success;
@@ -16,6 +20,7 @@ public class QueryResult {
     private String filterType;
     private String filterValues;
     private List<String> fields;
+    private boolean moreResult;
 
     public String getRequestId() {
         return requestId;
@@ -87,6 +92,14 @@ public class QueryResult {
 
     public void setFields(List<String> fields) {
         this.fields = fields;
+    }
+
+    public boolean isMoreResult() {
+        return moreResult;
+    }
+
+    public void setMoreResult(boolean moreResult) {
+        this.moreResult = moreResult;
     }
 
     @Override

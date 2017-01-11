@@ -3,7 +3,6 @@ package com.springml.marketo.rest.client;
 import com.springml.marketo.rest.client.model.QueryResult;
 import com.springml.marketo.rest.client.model.activities.ActivityTypes;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -62,21 +61,13 @@ public interface LeadDatabaseClient {
     ActivityTypes getActivityTypes() throws Exception;
 
     /**
-     * List All Activities of all activity types
-     * @param sinceDate
-     * @return
-     * @throws Exception
-     */
-    QueryResult getActivites(String sinceDate) throws Exception;
-
-    /**
      * List all the activities of the specified types
      * @param sinceDate
      * @param activityTypeIds
      * @return
      * @throws Exception
      */
-    QueryResult getActivities(String sinceDate, List<String> activityTypeIds) throws Exception;
+    List<Map<String, String>> getActivities(String sinceDate, List<String> activityTypeIds) throws Exception;
 
     /**
      * List Lead changes

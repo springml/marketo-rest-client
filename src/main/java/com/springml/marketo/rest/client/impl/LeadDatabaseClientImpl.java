@@ -121,22 +121,33 @@ public class LeadDatabaseClientImpl implements LeadDatabaseClient {
     }
 
     @Override
-    public QueryResult getActivites(String sinceDate) throws Exception {
-        ActivityTypes activityTypes = getActivityTypes();
-        validate(activityTypes);
-        List<Result> results = activityTypes.getResult();
-        List<String> activityIdList = new ArrayList<>();
-        for (Result result : results) {
-            activityIdList.add(String.valueOf(result.getId()));
+    public List<Map<String, String>> getActivities(String sinceDate, List<String> activityTypeIds) throws Exception {
+        String pagingToken = getPagingToken(sinceDate);
+        boolean containsMoreRecords = true;
+
+        List<Map<String, String>> activities = new ArrayList<>();
+        Map<String, String> params = new HashMap<>();
+        if (CollectionUtils.isNotEmpty(activityTypeIds)) {
+            params.put(STR_ACTIVITY_TYPE_IDS, String.join(STR_COMMA, activityTypeIds));
+        }
+        String path = getRestPath(OBJ_ACTIVITIES);
+
+        while (containsMoreRecords) {
+            params.put(STR_NEXT_PAGE_TOKEN, pagingToken);
+
+            String response = httpHelper.get(baseUri, path, sessionId, params);
+            QueryResult queryResult = objectMapper.readValue(response, QueryResult.class);
+            validate(queryResult);
+
+            if (CollectionUtils.isNotEmpty(queryResult.getResult())) {
+                activities.addAll(queryResult.getResult());
+            }
+
+            containsMoreRecords = queryResult.isMoreResult();
+            pagingToken = queryResult.getNextPageToken();
         }
 
-        return getActivities(sinceDate, activityIdList);
-    }
-
-    @Override
-    public QueryResult getActivities(String sinceDate, List<String> activityTypeIds) throws Exception {
-        String pagingToken = getPagingToken(sinceDate);
-        return null;
+        return activities;
     }
 
     @Override
