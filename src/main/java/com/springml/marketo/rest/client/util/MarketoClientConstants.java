@@ -28,6 +28,8 @@ public class MarketoClientConstants {
     public static final String STR_OAUTH_PATH = "/identity/oauth/token";
     public static final String STR_ACTIVITIES_TYPES_PATH = "activities/types";
     public static final String STR_ACTIVITIES_PAGING_TOKEN_PATH = "activities/pagingtoken";
+    public static final String STR_ACTIVITIES_LEAD_CHANGES_PATH = "activities/leadchanges";
+    public static final String STR_ACTIVITIES_DELETED_LEADS_PATH = "activities/deletedleads";
 
     public static final String OBJ_ACTIVITIES = "activities";
 

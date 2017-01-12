@@ -76,7 +76,7 @@ public interface LeadDatabaseClient {
      * @return
      * @throws Exception
      */
-    QueryResult getLeadChangesActivites(String sinceDate, List<String> affectedFields) throws Exception;
+    List<Map<String, String>> getLeadChangesActivites(String sinceDate, List<String> affectedFields) throws Exception;
 
     /**
      * Get the activities for Deleted Leads
@@ -84,7 +84,7 @@ public interface LeadDatabaseClient {
      * @return
      * @throws Exception
      */
-    QueryResult getDeletedLeadsActivites(String sinceDate) throws Exception;
+    List<Map<String, String>> getDeletedLeadsActivites(String sinceDate) throws Exception;
 
     /**
      * Get the paging token to be used on other calls

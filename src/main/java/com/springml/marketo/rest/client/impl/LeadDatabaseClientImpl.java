@@ -8,7 +8,6 @@ import com.springml.marketo.rest.client.model.OAuthResponse;
 import com.springml.marketo.rest.client.model.QueryResult;
 import com.springml.marketo.rest.client.model.activities.ActivityTypes;
 import com.springml.marketo.rest.client.model.activities.PagingToken;
-import com.springml.marketo.rest.client.model.activities.Result;
 import com.springml.marketo.rest.client.util.HttpHelper;
 import com.springml.marketo.rest.client.util.MarketoClientException;
 import org.apache.commons.collections4.CollectionUtils;
@@ -122,42 +121,24 @@ public class LeadDatabaseClientImpl implements LeadDatabaseClient {
 
     @Override
     public List<Map<String, String>> getActivities(String sinceDate, List<String> activityTypeIds) throws Exception {
-        String pagingToken = getPagingToken(sinceDate);
-        boolean containsMoreRecords = true;
-
-        List<Map<String, String>> activities = new ArrayList<>();
-        Map<String, String> params = new HashMap<>();
-        if (CollectionUtils.isNotEmpty(activityTypeIds)) {
-            params.put(STR_ACTIVITY_TYPE_IDS, String.join(STR_COMMA, activityTypeIds));
-        }
         String path = getRestPath(OBJ_ACTIVITIES);
+        return getActivities(path, sinceDate, activityTypeIds, null);
+    }
 
-        while (containsMoreRecords) {
-            params.put(STR_NEXT_PAGE_TOKEN, pagingToken);
-
-            String response = httpHelper.get(baseUri, path, sessionId, params);
-            QueryResult queryResult = objectMapper.readValue(response, QueryResult.class);
-            validate(queryResult);
-
-            if (CollectionUtils.isNotEmpty(queryResult.getResult())) {
-                activities.addAll(queryResult.getResult());
-            }
-
-            containsMoreRecords = queryResult.isMoreResult();
-            pagingToken = queryResult.getNextPageToken();
+    @Override
+    public List<Map<String, String>> getLeadChangesActivites(String sinceDate, List<String> affectedFields) throws Exception {
+        if (CollectionUtils.isEmpty(affectedFields)) {
+            throw new Exception("To fetch Lead Changes, fields should be provided");
         }
 
-        return activities;
+        String restPath = getRestPath(STR_ACTIVITIES_LEAD_CHANGES_PATH);
+        return getActivities(restPath, sinceDate, null, affectedFields);
     }
 
     @Override
-    public QueryResult getLeadChangesActivites(String sinceDate, List<String> affectedFields) throws Exception {
-        return null;
-    }
-
-    @Override
-    public QueryResult getDeletedLeadsActivites(String sinceDate) throws Exception {
-        return null;
+    public List<Map<String, String>> getDeletedLeadsActivites(String sinceDate) throws Exception {
+        String restPath = getRestPath(STR_ACTIVITIES_DELETED_LEADS_PATH);
+        return getActivities(restPath, sinceDate, null, null);
     }
 
     @Override
@@ -170,6 +151,40 @@ public class LeadDatabaseClientImpl implements LeadDatabaseClient {
         PagingToken pagingToken = objectMapper.readValue(response, PagingToken.class);
 
         return pagingToken.getNextPageToken();
+    }
+
+    private List<Map<String, String>> getActivities(String restPath,
+                                                    String sinceDate,
+                                                    List<String> activityTypeIds,
+                                                    List<String> fields) throws Exception {
+        String pagingToken = getPagingToken(sinceDate);
+        boolean containsMoreRecords = true;
+
+        List<Map<String, String>> activities = new ArrayList<>();
+        Map<String, String> params = new HashMap<>();
+        if (CollectionUtils.isNotEmpty(activityTypeIds)) {
+            params.put(STR_ACTIVITY_TYPE_IDS, String.join(STR_COMMA, activityTypeIds));
+        }
+        if (CollectionUtils.isNotEmpty(fields)) {
+            params.put(STR_FIELDS, String.join(STR_COMMA, fields));
+        }
+
+        while (containsMoreRecords) {
+            params.put(STR_NEXT_PAGE_TOKEN, pagingToken);
+
+            String response = httpHelper.get(baseUri, restPath, sessionId, params);
+            QueryResult queryResult = objectMapper.readValue(response, QueryResult.class);
+            validate(queryResult);
+
+            if (CollectionUtils.isNotEmpty(queryResult.getResult())) {
+                activities.addAll(queryResult.getResult());
+            }
+
+            containsMoreRecords = queryResult.isMoreResult();
+            pagingToken = queryResult.getNextPageToken();
+        }
+
+        return activities;
     }
 
     private QueryResult query(String object, String filterType,
