@@ -83,9 +83,7 @@ public class LeadDatabaseClientImpl implements LeadDatabaseClient {
             }
 
             QueryResult queryResult = query(object, STR_ID, filterValues.toString(), fields);
-            if (!queryResult.isSuccess()) {
-                throw new Exception ("Error while fetching records from Marketo. Error : " + queryResult.getErrors());
-            }
+            validate(queryResult);
 
             if (CollectionUtils.isNotEmpty(queryResult.getResult())) {
                 totalRecords.addAll(queryResult.getResult());
@@ -158,6 +156,7 @@ public class LeadDatabaseClientImpl implements LeadDatabaseClient {
                                                     List<String> activityTypeIds,
                                                     List<String> fields) throws Exception {
         String pagingToken = getPagingToken(sinceDate);
+        LOG.info("Paging Token " + pagingToken);
         boolean containsMoreRecords = true;
 
         List<Map<String, String>> activities = new ArrayList<>();
