@@ -1,0 +1,24 @@
+{
+  "requestId": "9ddd#1598c354d80",
+  "result": [
+    {
+      "id": 1,
+      "updatedAt": "2016-12-27T06:02:18Z",
+      "lastName": "Alex",
+      "email": "sam@test.com",
+      "createdAt": "2016-12-27T06:02:18Z",
+      "firstName": "Sam"
+    },
+    {
+      "id": 2,
+      "updatedAt": "2016-12-30T05:25:29Z",
+      "lastName": "Wright",
+      "email": "rwrighty@csmonitor.com",
+      "createdAt": "2016-12-30T05:25:29Z",
+      "firstName": "Robin"
+    }
+  ],
+
+  "nextPageToken": "K33T5MIVQSZCDLDDPSIAJAGHW6GF4EPQR7AQNTZP2HJAW57A27SQ====",
+  "success": true
+}

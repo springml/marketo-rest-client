@@ -1,0 +1,14 @@
+{
+  "requestId": "149c0#1598cf637eb",
+  "result": [
+    {
+      "id": 10,
+      "updatedAt": "2016-12-27T06:02:18Z",
+      "lastName": "Alex",
+      "email": "sam@test.com",
+      "createdAt": "2016-12-27T06:02:18Z",
+      "firstName": "Sam"
+    }
+  ],
+  "success": true
+}
