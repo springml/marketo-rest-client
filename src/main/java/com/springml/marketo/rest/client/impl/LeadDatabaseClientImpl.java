@@ -62,6 +62,7 @@ public class LeadDatabaseClientImpl implements LeadDatabaseClient {
 
     public List<Map<String, String>> getAllRecords(String object) throws Exception {
         return getAllRecords(object, null);
+
     }
 
     public List<Map<String, String>> getAllRecords(String object, List<String> fields) throws Exception {
@@ -70,12 +71,15 @@ public class LeadDatabaseClientImpl implements LeadDatabaseClient {
         int cursor = 1;
 
         boolean containsMoreRecords = true;
-        while (containsMoreRecords) {
+        // TODO : What if no records found in first several iterations but still data exists?
+        int retryCount = 0;
+
+        while (containsMoreRecords || retryCount < 20) {
             // Fetch 300 records for every iteration
             StringBuilder filterValues = new StringBuilder();
             for (int i = 0; i < 300; i++) {
                 filterValues.append(cursor);
-                if (i != 300) {
+                if (i != 299) {
                     filterValues.append(",");
                 }
 
@@ -87,7 +91,9 @@ public class LeadDatabaseClientImpl implements LeadDatabaseClient {
 
             if (CollectionUtils.isNotEmpty(queryResult.getResult())) {
                 totalRecords.addAll(queryResult.getResult());
+                containsMoreRecords = true;
             } else {
+                retryCount++;
                 containsMoreRecords = false;
             }
         }
