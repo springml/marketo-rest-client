@@ -85,7 +85,6 @@
             List<Map<String, String>> expectedResults = getExpectedResultMaps();
 
             assertEquals(expectedResults, actualQueryResults);
-
         }
 
         @Test
