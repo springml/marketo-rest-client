@@ -24,6 +24,7 @@
         protected static String CLIENT_ID = "a36c5936-79e4-4e22-9995-1c8088033663";
         protected static String CLIENT_SECRET = "4kDFleFLinsCZWa6PEQ1JDt5AcmTGBPa";
         protected static String MARKETO_BASEURI = "https://559-AGH-810.mktorest.com";
+        protected static  String PAGING_TOKEN = "BR5X7EWI5FGQ42EOSFUGFBMYCF36D5CCQVSNLURZFMOIGN7X4MHA====";
 
         protected LeadDatabaseClient leadDatabaseClient;
 
@@ -52,10 +53,9 @@
             authParams.put(STR_CLIENT_SECRET, CLIENT_SECRET);
 
             ClassLoader classLoader = getClass().getClassLoader();
-            authResponse = IOUtils.toString(classLoader.getResourceAsStream("authResponse.json"));
+            authResponse = IOUtils.toString(classLoader.getResourceAsStream("authResponse.json"), "UTF-8");
 
             when(httpHelper.get(MARKETO_BASEURI, STR_OAUTH_PATH, authParams)).thenReturn(authResponse);
 
         }
-
     }

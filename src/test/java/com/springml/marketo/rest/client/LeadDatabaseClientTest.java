@@ -130,7 +130,7 @@
 
             QueryResult queryResult = getQueryResult(actualQueryResult);
             Map<String, String> pageTokenParams = getParamsMap("1,2");
-            pageTokenParams.put(STR_NEXT_PAGE_TOKEN, "K33T5MIVQSZCDLDDPSIAJAGHW6GF4EPQR7AQNTZP2HJAW57A27SQ====");
+            pageTokenParams.put(STR_NEXT_PAGE_TOKEN, PAGING_TOKEN);
             response = IOUtils.toString(classLoader.getResourceAsStream("leadFetchPageResponse.json"),
                     "UTF-8");
             when(httpHelper.get(MARKETO_BASEURI, "/rest/v1/leads.json", "e4ceb18c-f578-4ecb:sj",
