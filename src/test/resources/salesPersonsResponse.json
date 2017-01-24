@@ -1,0 +1,15 @@
+{
+  "requestId": "7fed#15987f41b7f",
+  "result": [
+    {
+      "seq": 0,
+      "id": 1202,
+      "updatedAt": "2017-01-03T08:52:40Z",
+      "createdAt": "2017-01-03T08:52:40Z",
+      "isEmployee": true,
+      "personType": "contact",
+      "externalSalesPersonId": "2345dhvv"
+    }
+  ],
+  "success": true
+}

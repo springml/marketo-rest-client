@@ -1,0 +1,15 @@
+{
+  "requestId": "a167#15987c9d5e0",
+  "result": [
+    {
+      "seq": 0,
+      "id": 1203,
+      "createdAt": "2017-01-03T07:08:11Z",
+      "company": "Microsoft",
+      "externalCompanyId": "29UYA3158",
+      "updatedAt": "2017-01-03T07:28:51Z"
+    }
+  ],
+  "nextPageToken": "BR5X7EWI5FGQ42EOSFUGFBMYCF36D5CCQVSNLURZFMOIGN7X4MHA====",
+  "success": true
+}

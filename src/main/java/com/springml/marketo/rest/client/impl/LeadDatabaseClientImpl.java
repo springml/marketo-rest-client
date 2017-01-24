@@ -79,7 +79,7 @@ public class LeadDatabaseClientImpl implements LeadDatabaseClient {
             StringBuilder filterValues = new StringBuilder();
             for (int i = 0; i < 300; i++) {
                 filterValues.append(cursor);
-                if (i != 299) {
+                if (i != 300) {
                     filterValues.append(",");
                 }
 
@@ -323,6 +323,4 @@ public class LeadDatabaseClientImpl implements LeadDatabaseClient {
             throw new MarketoClientException("Marketo Base Uri is mandatory to create connection with Marketo REST API");
         }
     }
-
-
 }

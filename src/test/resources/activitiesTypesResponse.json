@@ -1,0 +1,22 @@
+{
+  "requestId": "5873#159ba305ef6",
+  "result": [
+
+{
+  "id": 1,
+  "name": "Add to Nurture",
+  "description": "Add a lead to a nurture program",
+  "primaryAttribute": {
+    "name": "Program ID",
+    "dataType": "integer"
+  },
+  "attributes": [
+    {
+      "name": "Track ID",
+      "dataType": "integer"
+    }
+  ]
+}
+  ],
+  "success": true
+}

@@ -1,0 +1,14 @@
+{
+  "requestId": "1e83#15987d5bc3d",
+  "result": [
+    {
+      "seq": 0,
+      "marketoGUID": "63980b18",
+      "name": "Google",
+      "createdAt": "2017-01-03T11:01:23Z",
+      "updatedAt": "2017-01-03T11:11:33Z"
+    }
+  ],
+  "nextPageToken": "BR5X7EWI5FGQ42EOSFUGFBMYCF36D5CCQVSNLURZFMOIGN7X4MHA====",
+  "success": true
+}

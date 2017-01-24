@@ -1,0 +1,16 @@
+{
+  "requestId": "12d23#15987e9bc5f",
+  "result": [
+    {
+      "seq": 0,
+      "marketoGUID": "37026551",
+      "leadId": 1,
+      "createdAt": "2017-01-03T11:52:52Z",
+      "updatedAt": "2017-01-03T11:52:52Z",
+      "role": "Technical Buyer",
+      "externalOpportunityId": "19UYA"
+    }
+  ],
+  "nextPageToken": "BR5X7EWI5FGQ42EOSFUGFBMYCF36D5CCQVSNLURZFMOIGN7X4MHA====",
+  "success": true
+}

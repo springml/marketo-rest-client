@@ -69,6 +69,31 @@ public class Result {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Result result = (Result) o;
+
+        if (id != null ? !id.equals(result.id) : result.id != null) return false;
+        if (name != null ? !name.equals(result.name) : result.name != null) return false;
+        if (description != null ? !description.equals(result.description) : result.description != null) return false;
+        if (primaryAttribute != null ? !primaryAttribute.equals(result.primaryAttribute) : result.primaryAttribute != null)
+            return false;
+        return attributes != null ? attributes.equals(result.attributes) : result.attributes == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + (primaryAttribute != null ? primaryAttribute.hashCode() : 0);
+        result = 31 * result + (attributes != null ? attributes.hashCode() : 0);
+        return result;
+    }
+
+    @Override
     public String toString() {
         return "Result{" +
                 "id=" + id +

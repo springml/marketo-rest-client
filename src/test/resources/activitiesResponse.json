@@ -1,0 +1,26 @@
+{
+  "requestId": "55cb#159b50e96ff",
+  "result": [
+    {
+      "id": 1,
+      "leadId": 1,
+      "activityDate": "2016-12-27T06:02:18Z",
+      "activityTypeId": 12,
+      "primaryAttributeValueId": 1,
+      "primaryAttributeValue": "Sam Alex",
+      "attributes": [
+        {
+          "name": "Created Date",
+          "value": "2016-12-27"
+        },
+        {
+          "name": "Source Type",
+          "value": "New lead"
+        }
+      ]
+    }
+  ],
+  "success": true,
+  "nextPageToken": "BR5X7EWI5FGQ42EOSFUGFBMYCF36D5CCQVSNLURZFMOIGN7X4MHA====",
+  "moreResult": false
+}
