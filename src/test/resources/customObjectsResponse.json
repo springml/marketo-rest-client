@@ -1,0 +1,13 @@
+{
+  "requestId": "14f2b#159d457dadd",
+  "result": [
+    {
+      "seq": 0,
+      "marketoGUID": "8693d1a2",
+      "testField": "testValue1",
+      "updatedAt": "2017-01-20T11:36:26Z",
+      "createdAt": "2017-01-20T11:36:26Z"
+    }
+  ],
+  "success": true
+}
