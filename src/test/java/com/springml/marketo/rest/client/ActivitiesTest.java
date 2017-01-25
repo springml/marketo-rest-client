@@ -16,9 +16,9 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
 /**
- * Junit for ActivityTypes
+ * Junit for Activities
  */
-public class ActivitiesTypeTest extends BaseDatabaseClientTest {
+public class ActivitiesTest extends BaseDatabaseClientTest {
 
     private String response;
     private String PagingTokenResponse;
