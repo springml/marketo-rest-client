@@ -162,7 +162,7 @@ public class LeadDatabaseClientImpl implements LeadDatabaseClient {
                                                     List<String> activityTypeIds,
                                                     List<String> fields) throws Exception {
         String pagingToken = getPagingToken(sinceDate);
-        LOG.info("Paging Token " + pagingToken);
+        LOG.log(Level.FINE, "Paging Token " + pagingToken);
         boolean containsMoreRecords = true;
 
         List<Map<String, String>> activities = new ArrayList<>();
@@ -211,9 +211,9 @@ public class LeadDatabaseClientImpl implements LeadDatabaseClient {
             params.put(STR_NEXT_PAGE_TOKEN, nextPageToken);
         }
 
-        LOG.info("Session Id : " + sessionId);
+        LOG.log(Level.FINE, "Session Id : " + sessionId);
         String response = httpHelper.get(baseUri, path, sessionId, params);
-        LOG.info("Response from Marketo REST Api " + response);
+        LOG.log(Level.FINE, "Response from Marketo REST Api " + response);
         QueryResult queryResult = objectMapper.readValue(response, QueryResult.class);
         if (!queryResult.isSuccess()) {
             List<Error> errors = queryResult.getErrors();
@@ -247,9 +247,9 @@ public class LeadDatabaseClientImpl implements LeadDatabaseClient {
         params.put(STR_CLIENT_SECRET, clientSecret);
 
         String response = httpHelper.get(baseUri, STR_OAUTH_PATH, params);
-        LOG.info("Auth call response  " + response);
+        LOG.log(Level.FINE, "Auth call response  " + response);
         OAuthResponse oAuthResponse = objectMapper.readValue(response, OAuthResponse.class);
-        LOG.info("Bean class for OAuthResponse" + oAuthResponse);
+        LOG.log(Level.FINE, "Bean class for OAuthResponse" + oAuthResponse);
 
         return oAuthResponse.getAccessToken();
     }
